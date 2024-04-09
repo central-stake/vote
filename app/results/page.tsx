@@ -1,6 +1,8 @@
 'use client'
 
 import VoteResults from "@/app/components/VoteResults";
+import { Button } from "@/components/ui/button";
+import { Share2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -22,6 +24,11 @@ export default function Results() {
           TODO: USER VOTE
         </div>
       </VoteResults>
+      <div className="flex items-center justify-center">
+        <Button>
+          Share the results <Share2 className="w-4 h-4 ml-2" />
+        </Button>
+      </div>
     </div>
   );
 }
