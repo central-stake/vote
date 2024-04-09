@@ -9,8 +9,10 @@ import ExplanationDialog from "./ExplanationsDialog";
 
 export function Navbar() {
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
   const isVotePage = pathname === '/vote';
   const isSummaryPage = pathname === '/summary';
+  const voteId: string | null = localStorage.getItem('voteId');
 
   return (
     <nav className="border-b bg-background h-[10vh] flex items-center min-h-16">
@@ -23,7 +25,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-x-5">
           <div className="flex items-center gap-x-5">
-            {isVotePage || isSummaryPage ? (
+            {isVotePage || isSummaryPage || (voteId && !isHomePage) ? (
               <Button asChild>
                 <Link href="/">
                   <Home />
