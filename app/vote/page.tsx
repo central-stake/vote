@@ -1,6 +1,5 @@
 'use client'
 
-import { CandidateGroup } from "@/lib/candidates";
 import VoteCardItem from "../components/VoteCardItem";
 import { Card } from "@/components/ui/card";
 import BottomVote from "../components/BotttomVote";
@@ -8,22 +7,8 @@ import { useEffect, useState } from "react";
 import { VotesState } from "@/lib/votes";
 import candidateGroup from "@/lib/candidate-group";
 import LoadingOverlay from "../components/LoadingOverlay";
-
-export const initialCredit: number = 30;
-
-function convertCandidateGroupToState(candidateGroup: CandidateGroup[]) : VotesState {
-  const state: VotesState = {
-    credit: initialCredit,
-    votes: {},
-  };
-  candidateGroup.forEach(item => {
-    item.candidates.forEach(candidate => {
-      state.votes[candidate.id] = 0;
-    });
-  });
-
-  return state;
-}
+import { convertCandidateGroupToState, initialCredit } from "@/lib/utils";
+import { redirect } from "next/navigation";
 
 export default function Vote() {
 
@@ -40,7 +25,10 @@ export default function Vote() {
   }
 
   useEffect(() => {
-    // TODO: utilisé le local storage pour vérifier si l'utilisateur à déjà commencé un vote et utiliser cette valeur si besoin pour initialiser le state
+    const voteId = localStorage.getItem('voteId');
+    if (voteId) {
+      redirect(`/results?id=${voteId}`);
+    }
     const storedData = localStorage.getItem('votes');
     if (storedData) {
       const voteState: VotesState = JSON.parse(storedData);

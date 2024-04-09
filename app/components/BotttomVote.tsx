@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { initialCredit } from "../vote/page";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { initialCredit } from "@/lib/utils";
 
 export default function BottomVote({ availableCredit, onReset } : { availableCredit: number, onReset: () => void }) {
   return (
@@ -19,8 +20,10 @@ export default function BottomVote({ availableCredit, onReset } : { availableCre
           <Button variant="secondary" className="mr-4" disabled={availableCredit === initialCredit} onClick={onReset}>
             Reset my votes
           </Button>
-          <Button>
-            Confirm my vote
+          <Button disabled={availableCredit === initialCredit}>
+            <Link href="/summary">
+              Confirm my vote
+            </Link>
           </Button>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "./ThemeToggle";
+// import { ThemeToggle } from "./ThemeToggle";
 import { usePathname } from "next/navigation";
 import { Home } from "lucide-react";
 import ExplanationDialog from "./ExplanationsDialog";
@@ -10,6 +10,7 @@ import ExplanationDialog from "./ExplanationsDialog";
 export function Navbar() {
   const pathname = usePathname();
   const isVotePage = pathname === '/vote';
+  const isSummaryPage = pathname === '/summary';
 
   return (
     <nav className="border-b bg-background h-[10vh] flex items-center min-h-16">
@@ -22,7 +23,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-x-5">
           <div className="flex items-center gap-x-5">
-            {isVotePage ? (
+            {isVotePage || isSummaryPage ? (
               <Button asChild>
                 <Link href="/">
                   <Home />
