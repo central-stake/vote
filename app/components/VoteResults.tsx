@@ -27,8 +27,8 @@ export default function VoteResults({ children } : { children: ReactNode}) {
           <VoteResultBySeat />
           </CarouselItem>
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious variant="default" />
+        <CarouselNext variant="default" />
       </Carousel>
     </div>
   );
