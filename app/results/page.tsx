@@ -17,7 +17,11 @@ export default function Results() {
 
   return (
     <div>
-      <VoteResults />
+      <VoteResults>
+        <div>
+          TODO: USER VOTE
+        </div>
+      </VoteResults>
     </div>
   );
 }
