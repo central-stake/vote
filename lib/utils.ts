@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { CandidateGroup } from "./candidates";
 import { VotesState } from "./votes";
+import { VotesSubmit } from "./vote-submit";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -27,4 +28,32 @@ export function convertCandidateGroupToState(candidateGroup: CandidateGroup[]) :
   });
 
   return state;
+}
+
+export function convertVoteToVoteSubmit(votes: VotesState): {
+  [key: string]: { count: number }
+} {
+  const newVotes: { [key: string]: { count: number } } = {};
+  for (const key in votes.votes) {
+    if (Object.prototype.hasOwnProperty.call(votes.votes, key)) {
+      newVotes[key] = { count: votes.votes[key] };
+    }
+  }
+  return newVotes;
+}
+
+export function convertVoteResponseToVoteState(response: {
+  [key: string]: { count: number }
+}) : VotesState {
+  const newVotes: VotesState = {
+    votes: {}
+  };
+
+  for (const key in response) {
+    if (Object.prototype.hasOwnProperty.call(response, key)) {
+      newVotes.votes[key] = response[key].count;
+    }
+  }
+
+  return newVotes;
 }

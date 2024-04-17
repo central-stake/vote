@@ -11,7 +11,6 @@ import { calculateCredit, convertCandidateGroupToState, initialCredit } from "@/
 import { redirect } from "next/navigation";
 
 export default function Vote() {
-
   const [votesState, setVotesState] = useState<VotesState>({
     credit: initialCredit,
     votes: {},
@@ -104,7 +103,7 @@ export default function Vote() {
                 </section>
               );
             })}
-            <BottomVote availableCredit={votesState.credit} onReset={initializeVoteState} />
+            <BottomVote availableCredit={votesState.credit ?? 0} onReset={initializeVoteState} />
           </main>
         </div>
       </div>

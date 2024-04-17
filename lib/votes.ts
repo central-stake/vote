@@ -1,5 +1,5 @@
 export type VotesState = {
-  credit: number,
+  credit?: number,
   votes: {
     [key: string]: number;
   }

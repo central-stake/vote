@@ -5,27 +5,35 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import LoadingOverlay from "../components/LoadingOverlay";
 import { VotesState } from "@/lib/votes";
-import { initialCredit } from "@/lib/utils";
+import { convertVoteToVoteSubmit, initialCredit } from "@/lib/utils";
 import candidateGroup from "@/lib/candidate-group";
 import { Card } from "@/components/ui/card";
 import { CandidateGroup } from "@/lib/candidates";
 import SummaryCardItem from "../components/SummaryCardItem";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
+import { CallResponse, createVote } from "../firebase/data";
 
 export default function Summary() {
   const router = useRouter();
   const uuid: string = uuidv4();
 
-  function submitMyVote() {
+  async function submitMyVote() {
     setIsLoading(true);
-    // TODO: make api call to save vote with UUID
-    localStorage.removeItem('votes');
-    localStorage.setItem('voteId', uuid);
-    setTimeout(() => {
+    const callResponse: CallResponse = await createVote({
+      campaignId: 'belgium-2024-1',
+      id: uuid,
+      votes: convertVoteToVoteSubmit(votesState),
+    });
+    if (callResponse.result) {
+      localStorage.removeItem('votes');
+      localStorage.setItem('voteId', uuid);
       router.push(`/results?id=${uuid}`);
-    }, 1000);
+    } else if (callResponse.error) {
+      // TODO: Show error message to the user and ask to try again
+      console.log('Error on saving vote : ', callResponse.error.message);
+    }
+    setIsLoading(false);
   }
 
   const [votesState, setVotesState] = useState<VotesState>({
