@@ -6,13 +6,18 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { Home } from "lucide-react";
 import ExplanationDialog from "./ExplanationsDialog";
+import { useEffect } from "react";
 
 export function Navbar() {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const isVotePage = pathname === '/vote';
   const isSummaryPage = pathname === '/summary';
-  const voteId: string | null = localStorage.getItem('voteId');
+  let voteId: string | null = null;
+
+  useEffect(() => {
+    voteId = localStorage.getItem('voteId');
+  }, [])
 
   return (
     <nav className="border-b bg-background h-[10vh] flex items-center min-h-16">

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { VotesState } from "@/lib/votes";
 import candidateGroup from "@/lib/candidate-group";
 import LoadingOverlay from "../components/LoadingOverlay";
-import { convertCandidateGroupToState, initialCredit } from "@/lib/utils";
+import { calculateCredit, convertCandidateGroupToState, initialCredit } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
 export default function Vote() {
@@ -46,13 +46,14 @@ export default function Vote() {
     };
     newVoteState.votes[candidateId] = value;
 
-    let totalVoteValue:number = 0;
+    let totalCreditValue:number = 0;
     Object.keys(newVoteState.votes).forEach(key => {
-      const value:number = newVoteState.votes[key];
-      totalVoteValue += Math.abs(value);
+      const vote = newVoteState.votes[key];
+
+      totalCreditValue += calculateCredit(Math.abs(vote));
     });
 
-    const newCreditValue:number = initialCredit - totalVoteValue;
+    const newCreditValue:number = initialCredit - totalCreditValue;
 
     if (newCreditValue >= 0) {
       const votes = {

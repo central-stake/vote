@@ -5,7 +5,7 @@ import { Candidate } from "@/lib/candidates";
 import { Input } from "@/components/ui/input";
 import { Minus, Plus } from "lucide-react";
 import { VotesState } from "@/lib/votes";
-import { cn } from "@/lib/utils";
+import { calculateCredit, cn } from "@/lib/utils";
 import ProgrammeDetails from "./ProgrammeDetails";
 
 export default function VoteCardItem({
@@ -70,7 +70,7 @@ export default function VoteCardItem({
             <span className="opacity-0">-</span>
           ) : (
             <span>
-              use {Math.abs(votesState.votes[candidate.id])} credit {voteIsPositive ? 'for' : 'against'} {candidate.label}
+              use {calculateCredit(Math.abs(votesState.votes[candidate.id]))} credit {voteIsPositive ? 'for' : 'against'} {candidate.label}
             </span>
           )}
         </div>
