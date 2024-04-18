@@ -141,7 +141,7 @@ const centerTextPlugin = {
 
 export default function VoteResultBySeat() {
   return (
-    <div style={{ height: '400px', width: '100%' }}>
+    <div className='flex items-center justify-center'>
       <Doughnut data={data} options={options} plugins={[ChartDataLabels, centerTextPlugin]} />
     </div>
   );

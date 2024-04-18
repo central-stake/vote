@@ -78,7 +78,7 @@ const options = {
       position: 'bottom',
     },
     title: {
-      display: true,
+      display: false,
       text: 'Voting System Comparison',
     },
     datalabels: {

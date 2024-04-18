@@ -79,23 +79,25 @@ export default function Results() {
     <LoadingOverlay isLoading={isLoading}>
       <div>
         <VoteResults>
-          <div>
-            <div className="text-center text-2xl font-bold mb-5">
-              {isMyVote && 'My vote'}
-              {isMyFriendVote && 'Your friend vote'}
+          <div className="flex justify-center items-center">
+            <div className="max-w-3xl">
+              <div className="text-center text-2xl font-bold mb-5">
+                {isMyVote && 'Vote'}
+                {isMyFriendVote && 'Your friend vote'}
+              </div>
+              {votes?.votes && filterVote(votes!.votes).map((item: {
+                id: string,
+                count: number,
+                }, _) => {
+                return (
+                  <ListResultItem
+                    key={item.id}
+                    voteCount={item.count}
+                    candidateId={item.id}
+                  />
+                );
+              })}
             </div>
-            {votes?.votes && filterVote(votes!.votes).map((item: {
-              id: string,
-              count: number,
-              }, _) => {
-              return (
-                <ListResultItem
-                  key={item.id}
-                  voteCount={item.count}
-                  candidateId={item.id}
-                />
-              );
-            })}
           </div>
         </VoteResults>
         <ShareResultsBox />
