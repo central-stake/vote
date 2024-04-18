@@ -25,8 +25,8 @@ export default function VoteCardItem({
   return (
     <Card className={cn(
       "flex flex-col justify-between border-[3px]",
-      voteIsNegative ? 'border-red-600' : '',
-      voteIsPositive ? 'border-green-600' : '',
+      voteIsNegative ? 'border-[#d93838]' : '',
+      voteIsPositive ? 'border-[#36ae62]' : '',
       voteIsEqualToZero && votesState.credit === 0 ? 'opacity-50' : '',
     )}>
       <CardHeader>

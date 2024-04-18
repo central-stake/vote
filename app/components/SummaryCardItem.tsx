@@ -18,13 +18,13 @@ export default function SummaryCardItem({
   const voteIsNegative: boolean = votesState.votes[candidate.id] < 0;
   const credit = Math.abs(votesState.votes[candidate.id]);
 
-  const color:string = voteIsNegative ? 'bg-red-600' : voteIsPositive ? 'bg-green-600' : '';
+  const color:string = voteIsNegative ? 'bg-[#d93838]' : voteIsPositive ? 'bg-[#36ae62]' : '';
 
   return (
     <Card className={cn(
       "flex flex-col justify-between border-[3px]",
-      voteIsNegative ? 'border-red-600' : '',
-      voteIsPositive ? 'border-green-600' : '',
+      voteIsNegative ? 'border-[#d93838]' : '',
+      voteIsPositive ? 'border-[#36ae62]' : '',
       voteIsEqualToZero && votesState.credit === 0 ? 'opacity-50' : '',
     )}>
       <CardHeader>

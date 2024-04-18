@@ -1,8 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { CandidateGroup } from "./candidates";
+import { Candidate, CandidateGroup } from "./candidates";
 import { VotesState } from "./votes";
-import { VotesSubmit } from "./vote-submit";
+import candidateGroup from "./candidate-group";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -28,6 +28,16 @@ export function convertCandidateGroupToState(candidateGroup: CandidateGroup[]) :
   });
 
   return state;
+}
+
+export function findCandidateById(id: string): Candidate | undefined {
+  for (const group of candidateGroup) {
+    const candidate = group.candidates.find(candidate => candidate.id === id);
+    if (candidate) {
+      return candidate;
+    }
+  }
+  return undefined;
 }
 
 export function convertVoteToVoteSubmit(votes: VotesState): {
