@@ -15,17 +15,17 @@ export default function VoteResults({ children } : { children: ReactNode}) {
     <div className="flex items-center justify-center">
       <Carousel className="max-w-screen-md">
         <CarouselContent>
+          <CarouselItem>
+            <VoteSystemComparison />
+          </CarouselItem>
           {children && (
             <CarouselItem>
               {children}
             </CarouselItem>
           )}
-          <CarouselItem>
-            <VoteSystemComparison />
-          </CarouselItem>
-          <CarouselItem>
-          <VoteResultBySeat />
-          </CarouselItem>
+          {/* <CarouselItem>
+            <VoteResultBySeat />
+          </CarouselItem> */}
         </CarouselContent>
         <CarouselPrevious variant="default" />
         <CarouselNext variant="default" />
