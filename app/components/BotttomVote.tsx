@@ -16,8 +16,8 @@ export default function BottomVote({ availableCredit, onReset } : { availableCre
             <Badge className="ml-3" variant="destructive">Nore more credit available</Badge>
           )}
         </div>
-        <div>
-          <Button variant="secondary" className="mr-4" disabled={availableCredit === initialCredit} onClick={onReset}>
+        <div className="flex">
+          <Button variant="secondary" className="mr-4 hidden md:block" disabled={availableCredit === initialCredit} onClick={onReset}>
             Reset my votes
           </Button>
           <Button disabled={availableCredit === initialCredit}>

@@ -86,8 +86,8 @@ export default function Vote() {
                       {item.label}
                     </h2>
                   </span>
-                  <Card className="px-6 py-8 bg-secondary pt-14">
-                    <div className="grid grid-cols-3 gap-4">
+                  <Card className="px-6 py-4 md:py-8 bg-secondary pt-14">
+                    <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
                       {item.candidates.map((candidate) => {
                         return (
                           <VoteCardItem

@@ -12,7 +12,12 @@ export default function ExplanationDialog() {
   return (
     <Dialog>
       <DialogTrigger className={buttonVariants({variant: 'secondary'})}>
-        How does it work?
+        <span className="block md:hidden">
+          Info
+        </span>
+        <span className="hidden md:block">
+          How does it work?
+        </span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -39,7 +39,12 @@ export function Navbar() {
             ) : (
               <Button asChild>
                 <Link href="/vote">
-                  Start voting now!
+                  <span className="block md:hidden">
+                    Start
+                  </span>
+                  <span className="hidden md:block">
+                    Start voting now!
+                  </span>
                 </Link>
               </Button>
             )}
