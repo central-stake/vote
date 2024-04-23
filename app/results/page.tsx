@@ -4,10 +4,11 @@ import VoteResults from "@/app/components/VoteResults";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ShareResultsBox from "../components/ShareResultsBox";
-import { CallResponse, getVoteById } from "../firebase/data";
+import { CallResponse, getParties, getResults, getVoteById } from "../firebase/data";
 import LoadingOverlay from "../components/LoadingOverlay";
 import { VotesState } from "@/lib/votes";
 import ListResultItem from "../components/ListResultItem";
+import { campaignId } from "@/lib/utils";
 
 export default function Results() {
   const router = useRouter();
@@ -17,8 +18,17 @@ export default function Results() {
   const [isMyVote, setIsMyVote] = useState<boolean>(false);
   const [isMyFriendVote, setIsMyFriendVote] = useState<boolean>(false);
 
-  async function getVote(voteId: string): Promise<void> {
+  async function getData(voteId: string | null, campaignId: string): Promise<void> {
     setIsLoading(true);
+    if (voteId) {
+      getVote(voteId);
+    }
+    getResultsFromApi(campaignId);
+    getPartiesFromApi(campaignId);
+    setIsLoading(false);
+  }
+
+  async function getVote(voteId: string): Promise<void> {
     const callResponse: CallResponse = await getVoteById(voteId);
     if (callResponse.result) {
       setVotes(callResponse.result);
@@ -27,7 +37,18 @@ export default function Results() {
       console.log('Error on getting vote : ', callResponse.error.message);
       router.replace('/results');
     }
-    setIsLoading(false);
+  }
+
+  async function getResultsFromApi(campaignId: string): Promise<void> {
+    const result = await getResults(campaignId);
+    // TODO: Use data
+    console.log('result : ', result);
+  }
+
+  async function getPartiesFromApi(campaignId: string): Promise<void> {
+    const parties = await getParties(campaignId);
+    // TODO: Use data
+    console.log('parties : ', parties);
   }
 
   function checkIfVoteCurrentUser(urlVoteId: string | null, localVoteId: string | null) {
@@ -47,15 +68,8 @@ export default function Results() {
   useEffect(() => {
     const urlVoteId: string | null = searchParams.get('id');
     const localVoteId: string | null = localStorage.getItem('voteId');
-
     checkIfVoteCurrentUser(urlVoteId, localVoteId);
-
-    const voteId: string | null = urlVoteId || localVoteId;
-    if (voteId) {
-      getVote(voteId);
-    } else {
-      setIsLoading(false);
-    }
+    getData(urlVoteId || localVoteId, campaignId);
   }, []);
 
   function filterVote(votes: {

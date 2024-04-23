@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import LoadingOverlay from "../components/LoadingOverlay";
 import { VotesState } from "@/lib/votes";
-import { convertVoteToVoteSubmit, initialCredit } from "@/lib/utils";
+import { campaignId, convertVoteToVoteSubmit, initialCredit } from "@/lib/utils";
 import candidateGroup from "@/lib/candidate-group";
 import { Card } from "@/components/ui/card";
 import { CandidateGroup } from "@/lib/candidates";
@@ -21,7 +21,7 @@ export default function Summary() {
   async function submitMyVote() {
     setIsLoading(true);
     const callResponse: CallResponse = await createVote({
-      campaignId: 'belgium-2024-1',
+      campaignId: campaignId,
       id: uuid,
       votes: convertVoteToVoteSubmit(votesState),
     });

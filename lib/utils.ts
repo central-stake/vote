@@ -15,6 +15,7 @@ export function calculateCredit(vote: number){
 }
 
 export const initialCredit: number = 30;
+export const campaignId: string =  'belgium-2024-1';
 
 export function convertCandidateGroupToState(candidateGroup: CandidateGroup[]) : VotesState {
   const state: VotesState = {
