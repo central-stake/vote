@@ -80,20 +80,24 @@ const getVotes = async (campaignId: string): Promise<CallResponse> => {
     const q = query(collectionRef, where('campaignId', '==', campaignId));
     const votesCollectionSnapshot: QuerySnapshot<DocumentData, DocumentData> = await getDocs(q);
 
+    console.log('docs : ', votesCollectionSnapshot.docs)
+
     const votes = votesCollectionSnapshot.docs.map((doc) => {
       const voteData = doc.data();
-      const partiesArray = Object.entries(voteData.parties).map(
-        ([id, { count }]: any) => ({
-          id,
-          count,
-        })
-      );
+      if (voteData.parties) {
+        const partiesArray = Object.entries(voteData.parties).map(
+          ([id, { count }]: any) => ({
+            id,
+            count,
+          })
+        );
 
-      return {
-        id: voteData.id,
-        campaignId: voteData.campaignId,
-        parties: partiesArray,
-      };
+        return {
+          id: voteData.id,
+          campaignId: voteData.campaignId,
+          parties: partiesArray,
+        };
+      }
     });
 
     return {

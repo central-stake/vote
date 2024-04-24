@@ -4,7 +4,7 @@ import VoteResults from "@/app/components/VoteResults";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ShareResultsBox from "../components/ShareResultsBox";
-import { CallResponse, getParties, getResults, getVoteById } from "../firebase/data";
+import { CallResponse, getParties, getResults, getVoteById, getVotes } from "../firebase/data";
 import LoadingOverlay from "../components/LoadingOverlay";
 import { VotesState } from "@/lib/votes";
 import ListResultItem from "../components/ListResultItem";
@@ -21,10 +21,11 @@ export default function Results() {
   async function getData(voteId: string | null, campaignId: string): Promise<void> {
     setIsLoading(true);
     if (voteId) {
-      getVote(voteId);
+      await getVote(voteId);
     }
-    getResultsFromApi(campaignId);
-    getPartiesFromApi(campaignId);
+    await getResultsFromApi(campaignId);
+    await getPartiesFromApi(campaignId);
+    await getVotesFromApi(campaignId);
     setIsLoading(false);
   }
 
@@ -49,6 +50,12 @@ export default function Results() {
     const parties = await getParties(campaignId);
     // TODO: Use data
     console.log('parties : ', parties);
+  }
+
+  async function getVotesFromApi(campaignId: string): Promise<void> {
+    const votes = await getVotes(campaignId);
+    // TODO: Use data
+    console.log('votes : ', votes);
   }
 
   function checkIfVoteCurrentUser(urlVoteId: string | null, localVoteId: string | null) {
