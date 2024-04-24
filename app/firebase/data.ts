@@ -1,11 +1,13 @@
 'use server'
 
-import app, { db, realTimeDB } from './config';
+import app, { db, realTimeDB, remoteConfig } from './config';
 import { addDoc, collection, query, where, getDocs, QuerySnapshot, DocumentData } from 'firebase/firestore';
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { VotesSubmit } from '@/lib/vote-submit';
 import { convertVoteResponseToVoteState } from '@/lib/utils';
 import { ref, get, child, DataSnapshot } from 'firebase/database';
+import { getValue, activate } from "firebase/remote-config";
+
 
 export type CallResponseError = {
   message: string,
@@ -15,6 +17,12 @@ export type CallResponse = {
   result?: any,
   error?: CallResponseError | null | undefined,
 };
+
+const getRemoveConfigValue = async () => {
+  await activate(remoteConfig);
+  const val = getValue(remoteConfig, "initialCreditCount");
+  console.log('val', val);
+}
 
 const createVote = async (voteData: VotesSubmit): Promise<CallResponse> => {
   const auth = getAuth(app);
@@ -195,4 +203,4 @@ const getParties = async (campaignId: string): Promise<CallResponse> => {
   }
 }
 
-export { createVote, getVoteById, getParties, getResults, getVotes }
+export { createVote, getVoteById, getParties, getResults, getVotes, getRemoveConfigValue }

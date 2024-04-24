@@ -4,7 +4,7 @@ import VoteResults from "@/app/components/VoteResults";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ShareResultsBox from "../components/ShareResultsBox";
-import { CallResponse, getParties, getResults, getVoteById } from "../firebase/data";
+import { CallResponse, getParties, getRemoveConfigValue, getResults, getVoteById } from "../firebase/data";
 import LoadingOverlay from "../components/LoadingOverlay";
 import { VotesState } from "@/lib/votes";
 import ListResultItem from "../components/ListResultItem";
@@ -25,6 +25,7 @@ export default function Results() {
     }
     getResultsFromApi(campaignId);
     getPartiesFromApi(campaignId);
+    getRemoveConfigValue()
     setIsLoading(false);
   }
 

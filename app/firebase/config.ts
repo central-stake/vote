@@ -1,6 +1,7 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
+import { getRemoteConfig } from "firebase/remote-config";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGOZHgBttP9JRIUfIMOr7lK20b-RmIbsE",
@@ -18,7 +19,11 @@ let app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
 const db = getFirestore(app);
 const realTimeDB = getDatabase(app, 'https://new-vote-be-default-rtdb.europe-west1.firebasedatabase.app');
+const remoteConfig = getRemoteConfig(app);
+remoteConfig.defaultConfig = {
+  "initialCreditCount": 40,
+};
 
-export { db, realTimeDB }
+export { db, realTimeDB, remoteConfig }
 
 export default app;
