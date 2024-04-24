@@ -80,8 +80,6 @@ const getVotes = async (campaignId: string): Promise<CallResponse> => {
     const q = query(collectionRef, where('campaignId', '==', campaignId));
     const votesCollectionSnapshot: QuerySnapshot<DocumentData, DocumentData> = await getDocs(q);
 
-    console.log('docs : ', votesCollectionSnapshot.docs)
-
     const votes = votesCollectionSnapshot.docs.map((doc) => {
       const voteData = doc.data();
       if (voteData.parties) {

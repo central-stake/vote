@@ -68,3 +68,36 @@ export function convertVoteResponseToVoteState(response: {
 
   return newVotes;
 }
+
+export function lightenColor(color: string, factor: number): string {
+  // Remove the "#" symbol if it exists
+  color = color.replace(/^#/, '');
+
+  // Parse the color as a hexadecimal number
+  const num = parseInt(color, 16);
+
+  // Extract the RGB components
+  let red = (num >> 16) & 255;
+  let green = (num >> 8) & 255;
+  let blue = num & 255;
+
+  // Calculate the new RGB values by increasing them
+  // You can adjust the factor to control the lightness
+  red = Math.min(255, red + factor);
+  green = Math.min(255, green + factor);
+  blue = Math.min(255, blue + factor);
+
+  // Convert the new RGB values back to hexadecimal
+  const newColor = `#${(blue | (green << 8) | (red << 16)).toString(16).padStart(6, '0')}`;
+
+  return newColor;
+}
+
+export function lightColors(colors: string[]): string[] {
+  return colors.map((color) => lightenColor(color, 80))
+};
+
+// Function to generate alternating colors
+export function alternatingColors(length: number, color1: string, color2: string): string[]  {
+  return Array.from({ length }, (_, i) => (i % 2 === 0 ? color1 : color2));
+};
