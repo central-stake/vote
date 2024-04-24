@@ -4,6 +4,7 @@ export type Candidate = {
   description: string,
   programme: string,
   websiteUrl: string,
+  color: string,
 }
 
 export type CandidateGroup = {
