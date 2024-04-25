@@ -32,8 +32,8 @@ export default function Summary() {
     } else if (callResponse.error) {
       // TODO: Show error message to the user and ask to try again
       console.log('Error on saving vote : ', callResponse.error.message);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
 
   const [votesState, setVotesState] = useState<VotesState>({
