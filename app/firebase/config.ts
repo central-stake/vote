@@ -2,7 +2,7 @@ import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyCGOZHgBttP9JRIUfIMOr7lK20b-RmIbsE",
     authDomain: "new-vote-be.firebaseapp.com",
     projectId: "new-vote-be",

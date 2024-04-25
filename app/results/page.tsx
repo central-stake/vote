@@ -8,7 +8,7 @@ import { CallResponse, getParties, getResults, getVoteById, getVotes } from "../
 import LoadingOverlay from "../components/LoadingOverlay";
 import { VotesState } from "@/lib/votes";
 import ListResultItem from "../components/ListResultItem";
-import { campaignId } from "@/lib/utils";
+import { defaultCampaignId } from "@/lib/utils";
 
 export default function Results() {
   const router = useRouter();
@@ -76,7 +76,7 @@ export default function Results() {
     const urlVoteId: string | null = searchParams.get('id');
     const localVoteId: string | null = localStorage.getItem('voteId');
     checkIfVoteCurrentUser(urlVoteId, localVoteId);
-    getData(urlVoteId || localVoteId, campaignId);
+    getData(urlVoteId || localVoteId, defaultCampaignId);
   }, []);
 
   function filterVote(votes: {

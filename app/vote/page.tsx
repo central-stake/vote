@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 import { VotesState } from "@/lib/votes";
 import candidateGroup from "@/lib/candidate-group";
 import LoadingOverlay from "../components/LoadingOverlay";
-import { calculateCredit, convertCandidateGroupToState, initialCredit } from "@/lib/utils";
+import { calculateCredit, convertCandidateGroupToState, defaultInitialCredit } from "@/lib/utils";
 import { redirect } from "next/navigation";
+// import { RemoteData, useRemoteConfig } from "../components/RemoteConfiProvider";
 
 export default function Vote() {
+  // const remoteConfig: RemoteData = useRemoteConfig();
   const [votesState, setVotesState] = useState<VotesState>({
-    credit: initialCredit,
+    credit: defaultInitialCredit,
     votes: {},
   });
 
@@ -52,7 +54,7 @@ export default function Vote() {
       totalCreditValue += calculateCredit(Math.abs(vote));
     });
 
-    const newCreditValue:number = initialCredit - totalCreditValue;
+    const newCreditValue:number = defaultInitialCredit - totalCreditValue;
 
     if (newCreditValue >= 0) {
       const votes = {

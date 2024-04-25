@@ -1,6 +1,6 @@
 import { CandidateGroup } from "./candidates";
 
-const candidateGroup: CandidateGroup[]  =  [
+const defaultCandidateGroup: CandidateGroup[] = [
   {
     id: 'centre-droit',
     label: 'Centre droit',
@@ -108,4 +108,4 @@ const candidateGroup: CandidateGroup[]  =  [
   },
 ];
 
-export default candidateGroup;
+export default defaultCandidateGroup;
