@@ -9,7 +9,8 @@ import {
   Legend,
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { lightColors, lightenColor } from "@/lib/utils";
+import { extractColorsAndLabels, lightColors, lightenColor } from "@/lib/utils";
+import candidateGroup from "@/lib/candidate-group";
 
 ChartJS.register(
   CategoryScale,
@@ -101,22 +102,24 @@ const alternatingBackgroundPlugin = {
 };
 
 export default function VoteSystemComparison() {
-  const optionColors = ['#03407F', '#7BB151', '#D94E0B','#D14057','#570B18', '#CEA10E', '#A40A22', '#D14057'];
+  const { optionColors, labels } = extractColorsAndLabels(candidateGroup);
 
   const data = {
-    labels: ['Open VLD', 'Groen', 'CD&V', 'PVDA', 'Vlaams Belang', 'N-VA', 'Vooruuit'], // Replace these with your actual options
+    labels: labels,
     datasets: [
         {
             label: 'Old voting system',
-            data: [12.1, 10.3, 9.6, 5.7, 24.8, 21.5, 15.12], // Replace these with your actual data points
+            // TODO: use data from firebase rtdb
+            data: [12.1, 10.3, 9.6, 5.7, 24.8, 21.5, 15.12, 22.7, 12.9],
             backgroundColor: optionColors,
             borderColor: 'rgba(0, 123, 255, 1)',
             borderWidth: 0
         },
         {
             label: 'New voting system',
-            data: [-5, 15, 8, 3, -7, 14, 30], // Replace these with your actual data points
-            backgroundColor: lightColors(optionColors), // alternatingColors(5, 'red', 'green')
+            // TODO: use data from firebase rtdb
+            data: [-5, 15, 8, 3, -7, 14, 30, -2, 6],
+            backgroundColor: lightColors(optionColors),
             borderColor: 'rgba(255, 193, 7, 1)',
             borderWidth: 0
         }

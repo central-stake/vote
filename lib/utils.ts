@@ -101,3 +101,17 @@ export function lightColors(colors: string[]): string[] {
 export function alternatingColors(length: number, color1: string, color2: string): string[]  {
   return Array.from({ length }, (_, i) => (i % 2 === 0 ? color1 : color2));
 };
+
+export function extractColorsAndLabels(candidateGroup: CandidateGroup[]) {
+  const optionColors: string[] = [];
+  const labels: string[] = [];
+
+  candidateGroup.forEach((group) => {
+      group.candidates.forEach((candidate) => {
+          optionColors.push(candidate.color);
+          labels.push(candidate.shortLabel);
+      });
+  });
+
+  return { optionColors, labels };
+}
