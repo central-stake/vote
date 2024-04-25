@@ -8,7 +8,36 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Vote now!",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean porta risus non nunc ornare",
+  description: "Make the vote great again",
+  openGraph: {
+    title: "Vote now!",
+    description: "Make the vote great again",
+    url: "https://new-vote.netlify.app/",
+    type: "website",
+    images: [
+      {
+        url: "https://new-vote.netlify.app/assets/vote-now.jpg",
+        type: "image/jpg",
+        width: 1200,
+        height: 630,
+        alt: "vote-now",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vote now!",
+    description: "Make the vote great again",
+    images: [
+      {
+        url: "https://new-vote.netlify.app/assets/vote-now.jpg",
+        type: "image/jpg",
+        width: 1200,
+        height: 630,
+        alt: "vote-now",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
