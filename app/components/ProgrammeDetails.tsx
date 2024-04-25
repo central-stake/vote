@@ -12,6 +12,12 @@ import { Info, SquareArrowOutUpRight } from "lucide-react";
 
 export default function ProgrammeDetails({ candidate } : { candidate: Candidate }) {
   return (
+    <a href={candidate.websiteUrl} target="_blank">
+      <SquareArrowOutUpRight className="text-muted-foreground w-4 h-4 ml-2" />
+    </a>
+  );
+
+  return (
     <Dialog>
       <DialogTrigger>
         <Info className="text-muted-foreground w-4 h-4 ml-2" />
