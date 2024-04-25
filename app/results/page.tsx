@@ -8,9 +8,15 @@ import { CallResponse, getParties, getResults, getVoteById, getVotes } from "../
 import LoadingOverlay from "../components/LoadingOverlay";
 import { VotesState } from "@/lib/votes";
 import ListResultItem from "../components/ListResultItem";
-import { defaultCampaignId } from "@/lib/utils";
+import { RemoteData, useRemoteConfig } from "../components/RemoteConfiProvider";
+import { CandidateGroup } from "@/lib/candidates";
 
 export default function Results() {
+  const remoteConfig: RemoteData = useRemoteConfig();
+  const [defaultInit, setDefaultInit] = useState<{
+    campaignId: string,
+    candidateGroup: CandidateGroup[]
+  } | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -73,11 +79,23 @@ export default function Results() {
   }
 
   useEffect(() => {
+    if (remoteConfig && !defaultInit) {
+      setDefaultInit({
+        campaignId: remoteConfig.campaignId,
+        candidateGroup: remoteConfig.candidateGroup,
+      });
+    }
+  }, [remoteConfig]);
+
+  useEffect(() => {
+    if (!defaultInit) {
+      return;
+    }
     const urlVoteId: string | null = searchParams.get('id');
     const localVoteId: string | null = localStorage.getItem('voteId');
     checkIfVoteCurrentUser(urlVoteId, localVoteId);
-    getData(urlVoteId || localVoteId, defaultCampaignId);
-  }, []);
+    getData(urlVoteId || localVoteId, defaultInit.campaignId);
+  }, [defaultInit]);
 
   function filterVote(votes: {
     [key: string]: number;
@@ -99,28 +117,31 @@ export default function Results() {
   return (
     <LoadingOverlay isLoading={isLoading}>
       <div>
-        <VoteResults>
-          <div className="flex justify-center items-center">
-            <div className="max-w-3xl">
-              <div className="text-center text-2xl font-bold mb-5">
-                {isMyVote && 'Vote'}
-                {isMyFriendVote && 'Your friend vote'}
+        {defaultInit && (
+          <VoteResults candidates={defaultInit.candidateGroup}>
+            <div className="flex justify-center items-center">
+              <div className="max-w-3xl">
+                <div className="text-center text-2xl font-bold mb-5">
+                  {isMyVote && 'Vote'}
+                  {isMyFriendVote && 'Your friend vote'}
+                </div>
+                {defaultInit && votes?.votes && filterVote(votes!.votes).map((item: {
+                  id: string,
+                  count: number,
+                  }, _) => {
+                  return (
+                    <ListResultItem
+                      key={item.id}
+                      voteCount={item.count}
+                      candidateId={item.id}
+                      candidates={defaultInit.candidateGroup}
+                    />
+                  );
+                })}
               </div>
-              {votes?.votes && filterVote(votes!.votes).map((item: {
-                id: string,
-                count: number,
-                }, _) => {
-                return (
-                  <ListResultItem
-                    key={item.id}
-                    voteCount={item.count}
-                    candidateId={item.id}
-                  />
-                );
-              })}
             </div>
-          </div>
-        </VoteResults>
+          </VoteResults>
+        )}
         <ShareResultsBox />
       </div>
     </LoadingOverlay>

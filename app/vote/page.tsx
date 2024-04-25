@@ -5,27 +5,43 @@ import { Card } from "@/components/ui/card";
 import BottomVote from "../components/BotttomVote";
 import { useEffect, useState } from "react";
 import { VotesState } from "@/lib/votes";
-import candidateGroup from "@/lib/candidate-group";
 import LoadingOverlay from "../components/LoadingOverlay";
-import { calculateCredit, convertCandidateGroupToState, defaultInitialCredit } from "@/lib/utils";
+import { calculateCredit, convertCandidateGroupToState } from "@/lib/utils";
 import { redirect } from "next/navigation";
-// import { RemoteData, useRemoteConfig } from "../components/RemoteConfiProvider";
+import { RemoteData, useRemoteConfig } from "../components/RemoteConfiProvider";
+import { CandidateGroup } from "@/lib/candidates";
 
 export default function Vote() {
-  // const remoteConfig: RemoteData = useRemoteConfig();
+  const remoteConfig: RemoteData = useRemoteConfig();
+  const [defaultInit, setDefaultInit] = useState<{
+    credit: number, candidateGroup: CandidateGroup[], quadratiqueEvolution: number[]
+  } | null>(null);
   const [votesState, setVotesState] = useState<VotesState>({
-    credit: defaultInitialCredit,
+    credit: 0,
     votes: {},
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  function initializeVoteState(): void {
-    const voteState = convertCandidateGroupToState(candidateGroup);
+  function initializeVoteState(candidates: CandidateGroup[]): void {
+    const voteState = convertCandidateGroupToState(candidates);
     setVotesState(voteState);
   }
 
   useEffect(() => {
+    if (remoteConfig && !defaultInit) {
+      setDefaultInit({
+        candidateGroup: remoteConfig.candidateGroup,
+        credit: remoteConfig.initialCreditCount,
+        quadratiqueEvolution: remoteConfig.quadratiqueEvolution,
+      });
+    }
+  }, [remoteConfig]);
+
+  useEffect(() => {
+    if (!defaultInit) {
+      return;
+    }
     const voteId = localStorage.getItem('voteId');
     if (voteId) {
       redirect(`/results?id=${voteId}`);
@@ -35,12 +51,12 @@ export default function Vote() {
       const voteState: VotesState = JSON.parse(storedData);
       setVotesState(voteState);
     } else {
-      initializeVoteState();
+      initializeVoteState(defaultInit.candidateGroup);
     }
     setIsLoading(false);
-  }, []);
+  }, [defaultInit]);
 
-  function updateVote(candidateId: string, value: number): void {
+  function updateVote(candidateId: string, value: number, initCredit: number): void {
     const newVoteState: VotesState = {
       credit: votesState.credit,
       votes: {...votesState.votes},
@@ -54,7 +70,7 @@ export default function Vote() {
       totalCreditValue += calculateCredit(Math.abs(vote));
     });
 
-    const newCreditValue:number = defaultInitialCredit - totalCreditValue;
+    const newCreditValue:number = initCredit - totalCreditValue;
 
     if (newCreditValue >= 0) {
       const votes = {
@@ -80,7 +96,7 @@ export default function Vote() {
           </header>
 
           <main className="pt-10">
-            {candidateGroup.map((item) => {
+            {defaultInit?.candidateGroup.map((item) => {
               return (
                 <section key={item.id} className="relative mb-20">
                   <span className="w-auto px-6 py-3 m-auto rounded-full bg-secondary block absolute left-2/4 translate-x-[-50%] translate-y-[-50%] border">
@@ -90,13 +106,15 @@ export default function Vote() {
                   </span>
                   <Card className="px-6 py-4 md:py-8 bg-secondary pt-14">
                     <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
-                      {item.candidates.map((candidate) => {
+                      {defaultInit && item.candidates.map((candidate) => {
                         return (
                           <VoteCardItem
                             key={candidate.id}
                             candidate={candidate}
                             votesState={votesState}
-                            updateVote={updateVote}
+                            updateVote={(candidateId: string, value: number) => {
+                              updateVote(candidateId, value, defaultInit.credit);
+                            }}
                           />
                         );
                       })}
@@ -105,7 +123,11 @@ export default function Vote() {
                 </section>
               );
             })}
-            <BottomVote availableCredit={votesState.credit ?? 0} onReset={initializeVoteState} />
+            {defaultInit && (
+              <BottomVote availableCredit={votesState.credit ?? 0} onReset={() => {
+                initializeVoteState(defaultInit.candidateGroup);
+              }} />
+            )}
           </main>
         </div>
       </div>

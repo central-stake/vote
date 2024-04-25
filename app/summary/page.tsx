@@ -5,23 +5,27 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import LoadingOverlay from "../components/LoadingOverlay";
 import { VotesState } from "@/lib/votes";
-import { convertVoteToVoteSubmit, defaultCampaignId, defaultInitialCredit } from "@/lib/utils";
-import candidateGroup from "@/lib/candidate-group";
+import { convertVoteToVoteSubmit } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { CandidateGroup } from "@/lib/candidates";
 import SummaryCardItem from "../components/SummaryCardItem";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CallResponse, createVote } from "../firebase/data";
+import { RemoteData, useRemoteConfig } from "../components/RemoteConfiProvider";
 
 export default function Summary() {
+  const remoteConfig: RemoteData = useRemoteConfig();
+  const [defaultInit, setDefaultInit] = useState<{
+    credit: number, candidateGroup: CandidateGroup[], campaignId: string,
+  } | null>(null);
   const router = useRouter();
   const uuid: string = uuidv4();
 
-  async function submitMyVote() {
+  async function submitMyVote(campaignId: string) {
     setIsLoading(true);
     const callResponse: CallResponse = await createVote({
-      campaignId: defaultCampaignId,
+      campaignId: campaignId,
       id: uuid,
       votes: convertVoteToVoteSubmit(votesState),
     });
@@ -37,7 +41,7 @@ export default function Summary() {
   }
 
   const [votesState, setVotesState] = useState<VotesState>({
-    credit: defaultInitialCredit,
+    credit: 0,
     votes: {},
   });
   const [candidatesWithVoteState, setCandidatesWithVoteState] = useState<CandidateGroup[]>([]);
@@ -45,6 +49,19 @@ export default function Summary() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    if (remoteConfig && !defaultInit) {
+      setDefaultInit({
+        candidateGroup: remoteConfig.candidateGroup,
+        credit: remoteConfig.initialCreditCount,
+         campaignId: remoteConfig.campaignId,
+      });
+    }
+  }, [remoteConfig]);
+
+  useEffect(() => {
+    if (!defaultInit) {
+      return;
+    }
     const storedData = localStorage.getItem('votes');
 
     if (storedData) {
@@ -56,7 +73,7 @@ export default function Summary() {
         }
       });
       const candidatesWithVote: CandidateGroup[] = [];
-      candidateGroup.forEach((item) => {
+      defaultInit.candidateGroup.forEach((item) => {
         item.candidates.forEach((candidate) => {
           if (hasVote.includes(candidate.id)){
             candidatesWithVote.push(item);
@@ -74,7 +91,7 @@ export default function Summary() {
     }
 
     setIsLoading(false);
-  }, []);
+  }, [defaultInit]);
 
   return (
     <LoadingOverlay isLoading={isLoading}>
@@ -118,7 +135,11 @@ export default function Summary() {
             })}
 
             <div className="flex items-center justify-center flex-col">
-              <Button className="mb-4 px-10 py-8" onClick={submitMyVote}>
+              <Button className="mb-4 px-10 py-8" onClick={() => {
+                if (defaultInit) {
+                  submitMyVote(defaultInit.campaignId);
+                }
+              }}>
                 <span className="text-base font-medium">
                   Ok, I confirm my vote
                 </span>

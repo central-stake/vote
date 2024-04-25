@@ -1,14 +1,14 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import ProgrammeDetails from "./ProgrammeDetails";
 import Image from 'next/image';
-import { Candidate } from "@/lib/candidates";
+import { Candidate, CandidateGroup } from "@/lib/candidates";
 import { findCandidateById, cn } from "@/lib/utils";
 
-export default function ListResultItem({ voteCount, candidateId } : { voteCount : number, candidateId: string }) {
+export default function ListResultItem({ voteCount, candidateId, candidates } : { voteCount : number, candidateId: string, candidates: CandidateGroup[] }) {
 
   const voteIsPositive: boolean = voteCount > 0;
   const voteIsNegative: boolean = voteCount < 0;
-  const candidate: Candidate | undefined = findCandidateById(candidateId);
+  const candidate: Candidate | undefined = findCandidateById(candidateId, candidates);
 
   if (!candidate) {
     return null;

@@ -9,9 +9,10 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CandidateGroup } from "@/lib/candidates";
 
 
-export default function VoteResults({ children } : { children: ReactNode}) {
+export default function VoteResults({ children, candidates } : { children: ReactNode, candidates: CandidateGroup[]}) {
 
   return (
     <div>
@@ -25,7 +26,7 @@ export default function VoteResults({ children } : { children: ReactNode}) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <VoteSystemComparison />
+          <VoteSystemComparison candidates={candidates} />
         </CardContent>
       </Card>
       <Card>
@@ -35,7 +36,7 @@ export default function VoteResults({ children } : { children: ReactNode}) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <VoteResultBySeat />
+          <VoteResultBySeat candidates={candidates} />
         </CardContent>
       </Card>
     </div>
@@ -46,7 +47,7 @@ export default function VoteResults({ children } : { children: ReactNode}) {
       <Carousel className="max-w-screen-md">
         <CarouselContent>
           <CarouselItem>
-            <VoteSystemComparison />
+            <VoteSystemComparison candidates={candidates}  />
           </CarouselItem>
           {children && (
             <CarouselItem>

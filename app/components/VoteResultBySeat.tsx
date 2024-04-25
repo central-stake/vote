@@ -14,8 +14,8 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { extractColorsAndLabels, lightenColor } from '@/lib/utils';
-import candidateGroup from '@/lib/candidate-group';
 import { useEffect, useState } from 'react';
+import { CandidateGroup } from '@/lib/candidates';
 
 ChartJS.register(
   CategoryScale,
@@ -29,7 +29,7 @@ ChartJS.register(
 );
 
 
-export default function VoteResultBySeat() {
+export default function VoteResultBySeat({ candidates } : {candidates: CandidateGroup[]}) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function VoteResultBySeat() {
     rotation: -90,
   };
 
-  const { optionColors, labels } = extractColorsAndLabels(candidateGroup);
+  const { optionColors, labels } = extractColorsAndLabels(candidates);
   const optionColorsLight = optionColors.map((x: string)=> lightenColor(x, 50));
 
   const data = {

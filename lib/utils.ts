@@ -2,13 +2,12 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { Candidate, CandidateGroup } from "./candidates";
 import { VotesState } from "./votes";
-import defaultCandidateGroup from "./candidate-group";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const defaultQuadratiqueEvolution = [0, 1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210];
+export const defaultQuadratiqueEvolution: number[] = [0, 1,3,6,10,15,21,28,36,45,55,66,78,91,105,120,136,153,171,190,210];
 
 export function calculateCredit(vote: number){
   return defaultQuadratiqueEvolution[vote];
@@ -31,8 +30,8 @@ export function convertCandidateGroupToState(candidateGroup: CandidateGroup[]) :
   return state;
 }
 
-export function findCandidateById(id: string): Candidate | undefined {
-  for (const group of defaultCandidateGroup) {
+export function findCandidateById(id: string, candidates: CandidateGroup[]): Candidate | undefined {
+  for (const group of candidates) {
     const candidate = group.candidates.find(candidate => candidate.id === id);
     if (candidate) {
       return candidate;

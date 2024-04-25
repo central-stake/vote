@@ -10,7 +10,7 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { extractColorsAndLabels, lightColors, lightenColor } from "@/lib/utils";
-import candidateGroup from "@/lib/candidate-group";
+import { CandidateGroup } from "@/lib/candidates";
 
 ChartJS.register(
   CategoryScale,
@@ -101,8 +101,8 @@ const alternatingBackgroundPlugin = {
   }
 };
 
-export default function VoteSystemComparison() {
-  const { optionColors, labels } = extractColorsAndLabels(candidateGroup);
+export default function VoteSystemComparison({ candidates } : { candidates: CandidateGroup[]}) {
+  const { optionColors, labels } = extractColorsAndLabels(candidates);
 
   const data = {
     labels: labels,
