@@ -114,3 +114,10 @@ export function extractColorsAndLabels(candidateGroup: CandidateGroup[]) {
 
   return { optionColors, labels };
 }
+
+export function isTotalVotesGreaterThanOne(data: VotesState): boolean {
+  const votesValues = Object.values(data.votes);
+  const totalVotes = votesValues.reduce((acc, curr) => acc + curr, 0);
+  console.log('is greater than : ',totalVotes >= 1 )
+  return totalVotes >= 1;
+}

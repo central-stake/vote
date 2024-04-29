@@ -6,7 +6,7 @@ import BottomVote from "../components/BotttomVote";
 import { useEffect, useState } from "react";
 import { VotesState } from "@/lib/votes";
 import LoadingOverlay from "../components/LoadingOverlay";
-import { calculateCredit, convertCandidateGroupToState } from "@/lib/utils";
+import { calculateCredit, convertCandidateGroupToState, isTotalVotesGreaterThanOne } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { RemoteData, useRemoteConfig } from "../components/RemoteConfiProvider";
 import { CandidateGroup } from "@/lib/candidates";
@@ -23,9 +23,12 @@ export default function Vote() {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  function initializeVoteState(candidates: CandidateGroup[]): void {
+  function initializeVoteState(candidates: CandidateGroup[], updateLocalStorage?: boolean): void {
     const voteState = convertCandidateGroupToState(candidates);
     setVotesState(voteState);
+    if(updateLocalStorage) {
+      localStorage.setItem('votes', JSON.stringify(voteState));
+    }
   }
 
   useEffect(() => {
@@ -124,8 +127,8 @@ export default function Vote() {
               );
             })}
             {defaultInit && (
-              <BottomVote availableCredit={votesState.credit ?? 0} onReset={() => {
-                initializeVoteState(defaultInit.candidateGroup);
+              <BottomVote isVotePositive={isTotalVotesGreaterThanOne(votesState)} availableCredit={votesState.credit ?? 0} onReset={() => {
+                initializeVoteState(defaultInit.candidateGroup, true);
               }} />
             )}
           </main>
